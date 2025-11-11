@@ -11,6 +11,12 @@ import WorkflowsPage from "./components/WorkflowsPage";
 import RevenuePage from "./components/RevenuePage";
 import AnalyticsPage from "./components/AnalyticsPage";
 import RolesPage from "./components/RolesPage";
+import LandingPage from "./components/LandingPage";      // 👈 NEW
+import SignInPage from "./components/SignInPage";        // 👈 NEW
+import SignUpPage from "./components/SignUpPage";        // 👈 NEW
+import DemoRequestPage from "./components/DemoRequestPage"; // 👈 NEW
+
+  type RootView = "landing" | "signin" | "signup" | "demo" | "app";
 
 
 const initialDeals: Deal[] = [
@@ -439,6 +445,9 @@ const initialTasks: Task[] = [
 
 
 const App: React.FC = () => {
+    const [rootView, setRootView] = useState<RootView>("landing"); // 👈 NEW
+
+  const [showLanding, setShowLanding] = useState<boolean>(true);
   const [page, setPage] = useState<Page>("pipeline");
   const [deals, setDeals] = useState<Deal[]>(initialDeals);
   const [contacts] = useState<Contact[]>(initialContacts);
@@ -452,25 +461,61 @@ const App: React.FC = () => {
     );
   };
 
+  // High-level routing for marketing / auth / demo / app
+  if (rootView === "landing") {
+    return (
+      <LandingPage
+        onLaunchApp={() => setRootView("signin")}
+        onGetStarted={() => setRootView("signup")}
+        onViewDemo={() => setRootView("demo")}
+      />
+    );
+  }
+
+  if (rootView === "signin") {
+    return (
+      <SignInPage
+        onBackToLanding={() => setRootView("landing")}
+        onGoToSignUp={() => setRootView("signup")}
+        onSignedIn={() => setRootView("app")}
+      />
+    );
+  }
+
+  if (rootView === "signup") {
+    return (
+      <SignUpPage
+        onBackToLanding={() => setRootView("landing")}
+        onGoToSignIn={() => setRootView("signin")}
+        onSignedUp={() => setRootView("app")}
+      />
+    );
+  }
+
+  if (rootView === "demo") {
+    return (
+      <DemoRequestPage
+        onBackToLanding={() => setRootView("landing")}
+        onSubmitted={() => setRootView("landing")}
+      />
+    );
+  }
+
+  // Once authenticated / signed-up, show the actual app
   return (
     <Layout currentPage={page} onNavigate={setPage}>
       {page === "pipeline" && (
         <PipelineBoard deals={deals} onStageChange={handleStageChange} />
       )}
-      {page === "roles" && <RolesPage />}  {/* 👈 new */}
       {page === "contacts" && <ContactsPage contacts={contacts} />}
       {page === "accounts" && <AccountsPage accounts={accounts} />}
       {page === "sequences" && <SequencesPage sequences={sequences} />}
       {page === "workflows" && <WorkflowsPage />}
       {page === "tasks" && <TasksPage tasks={tasks} />}
       {page === "integrations" && <IntegrationsPage />}
-      {page === "revenue" && <RevenuePage />}
-      {page === "analytics" && <AnalyticsPage />} {/* 👈 new */}
-
-
-
     </Layout>
   );
 };
 
 export default App;
+
