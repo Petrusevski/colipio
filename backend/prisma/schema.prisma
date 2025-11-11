@@ -1,0 +1,89 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String   @id @default(uuid())
+  auth_id    String?  @unique
+  email      String   @unique
+  full_name  String?
+  company    String?
+  role       String?  @default("user")
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  deals    Deal[]
+  contacts Contact[]
+  accounts Account[]
+  tasks    Task[]
+}
+
+model Account {
+  id         String   @id @default(uuid())
+  name       String
+  industry   String?
+  website    String?
+  owner_id   String
+  owner      User     @relation(fields: [owner_id], references: [id])
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  contacts Contact[]
+  deals    Deal[]
+}
+
+model Contact {
+  id          String   @id @default(uuid())
+  full_name   String
+  email       String?
+  phone       String?
+  title       String?
+  channel     String?
+  owner_id    String
+  owner       User     @relation(fields: [owner_id], references: [id])
+  account_id  String?
+  account     Account? @relation(fields: [account_id], references: [id])
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  deals Deal[]
+}
+
+model Deal {
+  id          String   @id @default(uuid())
+  title       String
+  stage       String
+  value       Float?
+  currency    String   @default("EUR")
+  source      String?
+  status      String   @default("open")
+  owner_id    String
+  owner       User     @relation(fields: [owner_id], references: [id])
+  account_id  String?
+  account     Account? @relation(fields: [account_id], references: [id])
+  contact_id  String?
+  contact     Contact? @relation(fields: [contact_id], references: [id])
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  tasks Task[]
+}
+
+model Task {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  status      String   @default("pending")
+  due_date    DateTime?
+  deal_id     String?
+  deal        Deal?    @relation(fields: [deal_id], references: [id])
+  assigned_to String?
+  assignee    User?    @relation(fields: [assigned_to], references: [id])
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+}
