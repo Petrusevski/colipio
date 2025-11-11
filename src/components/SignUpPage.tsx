@@ -1,20 +1,13 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
-interface SignUpPageProps {
-  onBackToLanding: () => void;
-  onGoToSignIn: () => void;
-  onSignedUp: () => void; // go into app
-}
+const SignUpPage: React.FC = () => {
+  const navigate = useNavigate();
 
-const SignUpPage: React.FC<SignUpPageProps> = ({
-  onBackToLanding,
-  onGoToSignIn,
-  onSignedUp,
-}) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // frontend-only: pretend account is created and go to app
-    onSignedUp();
+    navigate("/app");
   };
 
   return (
@@ -24,7 +17,7 @@ const SignUpPage: React.FC<SignUpPageProps> = ({
         <div className="mx-auto max-w-md px-4 py-3 flex items-center justify-between">
           <button
             className="text-[11px] text-slate-400 hover:text-slate-200"
-            onClick={onBackToLanding}
+            onClick={() => navigate("/")}
           >
             ← Back to marketing site
           </button>
@@ -116,7 +109,7 @@ const SignUpPage: React.FC<SignUpPageProps> = ({
             Already have an account?{" "}
             <button
               className="text-indigo-400 hover:text-indigo-300"
-              onClick={onGoToSignIn}
+              onClick={() => navigate("/signin")}
             >
               Sign in
             </button>

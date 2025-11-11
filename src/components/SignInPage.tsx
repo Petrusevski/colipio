@@ -1,20 +1,13 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
-interface SignInPageProps {
-  onBackToLanding: () => void;
-  onGoToSignUp: () => void;
-  onSignedIn: () => void; // go into app
-}
+const SignInPage: React.FC = () => {
+  const navigate = useNavigate();
 
-const SignInPage: React.FC<SignInPageProps> = ({
-  onBackToLanding,
-  onGoToSignUp,
-  onSignedIn,
-}) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // frontend-only: just drop user into the app
-    onSignedIn();
+    navigate("/app");
   };
 
   return (
@@ -24,7 +17,7 @@ const SignInPage: React.FC<SignInPageProps> = ({
         <div className="mx-auto max-w-md px-4 py-3 flex items-center justify-between">
           <button
             className="text-[11px] text-slate-400 hover:text-slate-200"
-            onClick={onBackToLanding}
+            onClick={() => navigate("/")}
           >
             ← Back to marketing site
           </button>
@@ -91,7 +84,7 @@ const SignInPage: React.FC<SignInPageProps> = ({
             Don&apos;t have an account?{" "}
             <button
               className="text-indigo-400 hover:text-indigo-300"
-              onClick={onGoToSignUp}
+              onClick={() => navigate("/signup")}
             >
               Create one
             </button>

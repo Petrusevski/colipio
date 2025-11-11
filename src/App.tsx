@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { Routes, Route } from "react-router-dom";
+
 import Layout from "./components/Layout";
 import PipelineBoard from "./components/PipelineBoard";
 import IntegrationsPage from "./components/IntegrationsPage";
@@ -6,18 +8,28 @@ import ContactsPage from "./components/ContactsPage";
 import AccountsPage from "./components/AccountsPage";
 import SequencesPage from "./components/SequencesPage";
 import TasksPage from "./components/TasksPage";
-import { Deal, Stage, Page, Contact, Account, Sequence, Task } from "./types";
 import WorkflowsPage from "./components/WorkflowsPage";
 import RevenuePage from "./components/RevenuePage";
 import AnalyticsPage from "./components/AnalyticsPage";
 import RolesPage from "./components/RolesPage";
-import LandingPage from "./components/LandingPage";      // 👈 NEW
-import SignInPage from "./components/SignInPage";        // 👈 NEW
-import SignUpPage from "./components/SignUpPage";        // 👈 NEW
-import DemoRequestPage from "./components/DemoRequestPage"; // 👈 NEW
 
-  type RootView = "landing" | "signin" | "signup" | "demo" | "app";
+import LandingPage from "./components/LandingPage";
+import SignInPage from "./components/SignInPage";
+import SignUpPage from "./components/SignUpPage";
+import DemoRequestPage from "./components/DemoRequestPage";
+import AboutPage from "./components/AboutPage";
+import CareersPage from "./components/CareersPage";
+import TermsPage from "./components/TermsPage";
+import PrivacyPage from "./components/PrivacyPage";
+import ProductsPage from "./components/ProductsPage";
+import PricingPage from "./components/PricingPage";
 
+
+import { Deal, Stage, Page, Contact, Account, Sequence, Task } from "./types";
+
+/* -------------------------------------------------------------------------- */
+/*                                INITIAL DATA                                */
+/* -------------------------------------------------------------------------- */
 
 const initialDeals: Deal[] = [
   {
@@ -84,160 +96,6 @@ const initialDeals: Deal[] = [
     value: 65000,
     priority: "High",
   },
-  {
-    id: "5",
-    contactName: "Eva Rossi",
-    companyName: "FitWave Studios",
-    title: "Founder",
-    stage: "Opportunity",
-    owner: "Ana",
-    segment: "SMB / Fitness",
-    source: "HeyReach",
-    lastTouch: "3d ago · Viewed pricing page",
-    nextStep: "Follow up with pilot offer",
-    channel: "LinkedIn",
-    tags: ["Warm", "Pilot"],
-    value: 12000,
-    priority: "Medium",
-  },
-  {
-    id: "6",
-    contactName: "David Kim",
-    companyName: "NorthLine Telecom",
-    title: "Retention Lead",
-    stage: "Lost",
-    owner: "Nikola",
-    segment: "Enterprise / Telco",
-    source: "Clay",
-    lastTouch: "Last week · Chose competitor",
-    nextStep: "Set reminder to re-check in 6 months",
-    channel: "Email",
-    tags: ["Lost", "Competitor"],
-    value: 80000,
-    priority: "High",
-  },
-];
-
-const initialSequences: Sequence[] = [
-  {
-    id: "seq1",
-    name: "Loyalty SaaS · Mid-market cold outreach",
-    status: "Active",
-    primaryChannel: "LinkedIn",
-    channelMix: ["LinkedIn", "Email", "Call"],
-    audience: "Retail & Fashion · 50–500 employees",
-    leads: 240,
-    sent: 1200,
-    replies: 126,
-    meetings: 34,
-    owner: "Nikola",
-    tools: "HeyReach + SmartLead",
-    createdAt: "2025-09-10",
-    lastRun: "2025-11-09 · 21:15",
-    tags: ["Cold", "ICP-validated", "Loyalty SaaS"],
-    channels: [
-      { type: "LinkedIn", sent: 800, replies: 92, meetings: 24 },
-      { type: "Email", sent: 300, replies: 28, meetings: 8 },
-      { type: "Call", sent: 100, replies: 6, meetings: 2 },
-    ],
-    templates: [
-      {
-        id: "t1",
-        name: "Loyalty SaaS cold opener (LinkedIn)",
-        channel: "LinkedIn",
-        snippet:
-          "Hey {{first_name}}, quick one – we help retail brands increase repeat purchases by 12–18% with a smarter loyalty stack. Curious if you're already testing anything in this direction?",
-      },
-      {
-        id: "t2",
-        name: "Follow-up after profile view",
-        channel: "LinkedIn",
-        snippet:
-          "Saw you checked my profile – appreciate you taking a look. Happy to share 2–3 quick loyalty experiments leaders in {{industry}} are running right now.",
-      },
-      {
-        id: "t3",
-        name: "Email follow-up with 2 case studies",
-        channel: "Email",
-        snippet:
-          "Subject: Quick loyalty wins for {{company}}\n\nHi {{first_name}},\n\nWe recently helped {{brand_1}} and {{brand_2}} lift repeat orders by 14–19% via simple loyalty nudges. Happy to send a 1-page breakdown if useful.",
-      },
-    ],
-  },
-  {
-    id: "seq2",
-    name: "Enrichment → Outreach combo",
-    status: "Active",
-    primaryChannel: "Email",
-    channelMix: ["Email", "LinkedIn"],
-    audience: "Tech-enabled retail & DTC",
-    leads: 180,
-    sent: 760,
-    replies: 82,
-    meetings: 21,
-    owner: "Eva",
-    tools: "Clay + SmartLead + HeyReach",
-    createdAt: "2025-10-02",
-    lastRun: "2025-11-08 · 16:42",
-    tags: ["Enrichment", "Multi-channel", "Playbook"],
-    channels: [
-      { type: "Email", sent: 500, replies: 70, meetings: 18 },
-      { type: "LinkedIn", sent: 260, replies: 12, meetings: 3 },
-    ],
-    templates: [
-      {
-        id: "t4",
-        name: "Clay-enriched intro (Email)",
-        channel: "Email",
-        snippet:
-          "Hi {{first_name}},\n\nNoticed via Clay that you're using {{tech_stack_item}} and expanding in {{region}}. We're helping similar teams turn that data into higher LTV via loyalty and retention experiments.",
-      },
-      {
-        id: "t5",
-        name: "Soft touch LinkedIn nudge",
-        channel: "LinkedIn",
-        snippet:
-          "Love what you're doing at {{company}} around {{initiative}}. Curious how you're thinking about retention/loyalty in the next 6–12 months?",
-      },
-    ],
-  },
-  {
-    id: "seq3",
-    name: "Expansion / Upsell: existing customers",
-    status: "Paused",
-    primaryChannel: "Call",
-    channelMix: ["Call", "Email"],
-    audience: "Existing high-usage customers",
-    leads: 60,
-    sent: 210,
-    replies: 40,
-    meetings: 18,
-    owner: "Martin",
-    tools: "CRM only",
-    createdAt: "2025-08-18",
-    lastRun: "2025-11-01 · 11:03",
-    tags: ["Expansion", "CS", "Renewal"],
-    channels: [
-      { type: "Call", sent: 90, replies: 30, meetings: 15 },
-      { type: "Email", sent: 120, replies: 10, meetings: 3 },
-    ],
-    templates: [
-      {
-        id: "t6",
-        name: "Quarterly value review (Call)",
-        channel: "Call",
-        snippet:
-          "Call agenda: 1) Review results from last 90 days. 2) Highlight underused features. 3) Explore uplift from upgrading tier or adding new modules.",
-      },
-      {
-        id: "t7",
-        name: "Post-call recap (Email)",
-        channel: "Email",
-        snippet:
-          "Hi {{first_name}},\n\nGreat speaking just now. As discussed, here's a quick recap and the 2–3 experiments we can run next quarter to increase your program performance.",
-      },
-    ],
-  },
 ];
 
 const initialContacts: Contact[] = [
@@ -281,16 +139,6 @@ const initialContacts: Contact[] = [
     lastActivity: "Asked for retail case studies · Today",
     status: "Active",
   },
-  {
-    id: "c5",
-    name: "Eva Rossi",
-    title: "Founder",
-    company: "FitWave Studios",
-    email: "eva@fitwave.studio",
-    channel: "LinkedIn",
-    lastActivity: "Clicked pricing link · 3d ago",
-    status: "Active",
-  },
 ];
 
 const initialAccounts: Account[] = [
@@ -318,13 +166,46 @@ const initialAccounts: Account[] = [
     openDeals: 1,
     lastTouch: "Contact enriched · Yesterday",
   },
+];
+
+const initialSequences: Sequence[] = [
   {
-    id: "a4",
-    name: "EuroMart Groceries",
-    segment: "Enterprise / Retail",
+    id: "seq1",
+    name: "Loyalty SaaS · Mid-market cold outreach",
+    status: "Active",
+    primaryChannel: "LinkedIn",
+    channelMix: ["LinkedIn", "Email", "Call"],
+    audience: "Retail & Fashion · 50–500 employees",
+    leads: 240,
+    sent: 1200,
+    replies: 126,
+    meetings: 34,
     owner: "Nikola",
-    openDeals: 1,
-    lastTouch: "Requested case studies · Today",
+    tools: "HeyReach + SmartLead",
+    createdAt: "2025-09-10",
+    lastRun: "2025-11-09 · 21:15",
+    tags: ["Cold", "ICP-validated", "Loyalty SaaS"],
+    channels: [
+      { type: "LinkedIn", sent: 800, replies: 92, meetings: 24 },
+      { type: "Email", sent: 300, replies: 28, meetings: 8 },
+      { type: "Call", sent: 100, replies: 6, meetings: 2 },
+    ],
+    templates: [
+      {
+        id: "t1",
+        name: "Loyalty SaaS cold opener (LinkedIn)",
+        channel: "LinkedIn",
+        snippet:
+          "Hey {{first_name}}, quick one – we help retail brands increase repeat purchases by 12–18% with a smarter loyalty stack. Curious if you're already testing anything in this direction?",
+      },
+      {
+        id: "t2",
+        name: "Follow-up after profile view",
+        channel: "LinkedIn",
+        snippet:
+          "Saw you checked my profile – appreciate you taking a look. Happy to share 2–3 quick loyalty experiments leaders in {{industry}} are running right now.",
+      },
+    ],
   },
 ];
 
@@ -340,7 +221,7 @@ const initialTasks: Task[] = [
     entityName: "Acme Retail · Demo",
     priority: "High",
     tags: ["Onboarding", "Demo Prep", "Retail"],
-    relatedDealId: "1", // Acme Retail
+    relatedDealId: "1",
     dependsOnIds: [],
   },
   {
@@ -353,101 +234,17 @@ const initialTasks: Task[] = [
     entityType: "Contact",
     entityName: "Liam Novak",
     priority: "Medium",
-    tags: ["Follow-up", "Enterprise", "Logistics"],
-    relatedDealId: "2", // SkyFleet Logistics
-    dependsOnIds: ["t4"],
-  },
-  {
-    id: "t3",
-    title: "Manual step: personalize first email",
-    type: "Manual Step",
-    owner: "Nikola",
-    due: "Tomorrow",
-    status: "Upcoming",
-    entityType: "Deal",
-    entityName: "UrbanFit · Pilot",
-    priority: "High",
-    tags: ["Outreach", "Personalization", "Fitness"],
-    relatedDealId: "3", // UrbanFit
-    dependsOnIds: ["t1"],
-  },
-  {
-    id: "t4",
-    title: "Follow up on no-show",
-    type: "Call",
-    owner: "Nikola",
-    due: "Yesterday",
-    status: "Overdue",
-    entityType: "Deal",
-    entityName: "SkyFleet · Evaluation",
-    priority: "High",
-    tags: ["Recovery", "Enterprise", "Critical"],
-    relatedDealId: "2", // SkyFleet Logistics
-    dependsOnIds: [],
-  },
-  {
-    id: "t5",
-    title: "Onboarding checklist: Acme Retail",
-    type: "Onboarding",
-    owner: "Nikola",
-    due: "This week",
-    status: "Upcoming",
-    entityType: "Deal",
-    entityName: "Acme Retail · Pilot",
-    priority: "Medium",
-    tags: ["Onboarding", "Playbook", "Retail"],
-    relatedDealId: "1",
-    dependsOnIds: ["t1"],
-  },
-  {
-    id: "t6",
-    title: "Success QBR deck for EuroMart",
-    type: "Success",
-    owner: "Nikola",
-    due: "Next week",
-    status: "Upcoming",
-    entityType: "Account",
-    entityName: "EuroMart Groceries",
-    priority: "Medium",
-    tags: ["Success", "QBR", "Enterprise"],
-    relatedDealId: "4", // EuroMart
-    dependsOnIds: [],
-  },
-  {
-    id: "t7",
-    title: "Prepare renewal strategy for SkyFleet",
-    type: "Renewal",
-    owner: "Ana",
-    due: "End of month",
-    status: "Upcoming",
-    entityType: "Subscription",
-    entityName: "SkyFleet Logistics · Rev-share",
-    priority: "High",
-    tags: ["Renewal", "Expansion", "Rev-share"],
+    tags: ["Follow-up", "Enterprise"],
     relatedDealId: "2",
-    dependsOnIds: ["t2", "t4"],
-  },
-  {
-    id: "t8",
-    title: "Internal: define onboarding playbook v1",
-    type: "Internal",
-    owner: "Nikola",
-    due: "Later",
-    status: "Upcoming",
-    entityType: "Account",
-    entityName: "All · Playbook",
-    priority: "Low",
-    tags: ["Internal", "Process", "Onboarding"],
-    relatedDealId: undefined,
-    dependsOnIds: [],
+    dependsOnIds: ["t1"],
   },
 ];
 
+/* -------------------------------------------------------------------------- */
+/*                                   APP JSX                                  */
+/* -------------------------------------------------------------------------- */
 
 const App: React.FC = () => {
-    const [rootView, setRootView] = useState<RootView>("landing"); // 👈 NEW
-
-  const [showLanding, setShowLanding] = useState<boolean>(true);
   const [page, setPage] = useState<Page>("pipeline");
   const [deals, setDeals] = useState<Deal[]>(initialDeals);
   const [contacts] = useState<Contact[]>(initialContacts);
@@ -461,61 +258,44 @@ const App: React.FC = () => {
     );
   };
 
-  // High-level routing for marketing / auth / demo / app
-  if (rootView === "landing") {
-    return (
-      <LandingPage
-        onLaunchApp={() => setRootView("signin")}
-        onGetStarted={() => setRootView("signup")}
-        onViewDemo={() => setRootView("demo")}
-      />
-    );
-  }
-
-  if (rootView === "signin") {
-    return (
-      <SignInPage
-        onBackToLanding={() => setRootView("landing")}
-        onGoToSignUp={() => setRootView("signup")}
-        onSignedIn={() => setRootView("app")}
-      />
-    );
-  }
-
-  if (rootView === "signup") {
-    return (
-      <SignUpPage
-        onBackToLanding={() => setRootView("landing")}
-        onGoToSignIn={() => setRootView("signin")}
-        onSignedUp={() => setRootView("app")}
-      />
-    );
-  }
-
-  if (rootView === "demo") {
-    return (
-      <DemoRequestPage
-        onBackToLanding={() => setRootView("landing")}
-        onSubmitted={() => setRootView("landing")}
-      />
-    );
-  }
-
-  // Once authenticated / signed-up, show the actual app
   return (
-    <Layout currentPage={page} onNavigate={setPage}>
-      {page === "pipeline" && (
-        <PipelineBoard deals={deals} onStageChange={handleStageChange} />
-      )}
-      {page === "contacts" && <ContactsPage contacts={contacts} />}
-      {page === "accounts" && <AccountsPage accounts={accounts} />}
-      {page === "sequences" && <SequencesPage sequences={sequences} />}
-      {page === "workflows" && <WorkflowsPage />}
-      {page === "tasks" && <TasksPage tasks={tasks} />}
-      {page === "integrations" && <IntegrationsPage />}
-    </Layout>
+    <Routes>
+      {/* Marketing & Auth pages */}
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/signin" element={<SignInPage />} />
+      <Route path="/signup" element={<SignUpPage />} />
+      <Route path="/demo" element={<DemoRequestPage />} />
+      <Route path="/about" element={<AboutPage />} />
+      <Route path="/careers" element={<CareersPage />} />
+      <Route path="/terms" element={<TermsPage />} />
+      <Route path="/privacy" element={<PrivacyPage />} />
+      <Route path="/products" element={<ProductsPage />} />
+      <Route path="/pricing" element={<PricingPage />} />
+
+
+
+      {/* Main app layout */}
+      <Route
+        path="/app"
+        element={
+          <Layout currentPage={page} onNavigate={setPage}>
+            {page === "pipeline" && (
+              <PipelineBoard deals={deals} onStageChange={handleStageChange} />
+            )}
+            {page === "contacts" && <ContactsPage contacts={contacts} />}
+            {page === "accounts" && <AccountsPage accounts={accounts} />}
+            {page === "sequences" && <SequencesPage sequences={sequences} />}
+            {page === "tasks" && <TasksPage tasks={tasks} />}
+            {page === "workflows" && <WorkflowsPage />}
+            {page === "integrations" && <IntegrationsPage />}
+            {page === "revenue" && <RevenuePage />}
+            {page === "analytics" && <AnalyticsPage />}
+            {page === "roles" && <RolesPage />}
+          </Layout>
+        }
+      />
+    </Routes>
   );
 };
 
 export default App;
-

@@ -1,22 +1,16 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-interface DemoRequestPageProps {
-  onBackToLanding: () => void;
-  onSubmitted: () => void; // after submit, maybe go back to landing
-}
-
-const DemoRequestPage: React.FC<DemoRequestPageProps> = ({
-  onBackToLanding,
-  onSubmitted,
-}) => {
+const DemoRequestPage: React.FC = () => {
   const [submitted, setSubmitted] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitted(true);
     // frontend-only: in real app you'd send this to backend / CRM
     setTimeout(() => {
-      onSubmitted();
+      navigate("/"); // go back to landing after short delay
     }, 800);
   };
 
@@ -27,7 +21,7 @@ const DemoRequestPage: React.FC<DemoRequestPageProps> = ({
         <div className="mx-auto max-w-xl px-4 py-3 flex items-center justify-between">
           <button
             className="text-[11px] text-slate-400 hover:text-slate-200"
-            onClick={onBackToLanding}
+            onClick={() => navigate("/")}
           >
             ← Back to marketing site
           </button>
@@ -50,8 +44,8 @@ const DemoRequestPage: React.FC<DemoRequestPageProps> = ({
 
           {submitted ? (
             <div className="mt-2 text-sm text-emerald-300">
-              Demo request submitted (frontend-only). You can now return to the
-              main site or explore the app.
+              Demo request submitted (frontend-only). Redirecting you back to
+              the main site…
             </div>
           ) : (
             <form className="space-y-3" onSubmit={handleSubmit}>

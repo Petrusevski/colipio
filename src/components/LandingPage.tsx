@@ -1,18 +1,15 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "./layout/Header";
 import Footer from "./layout/Footer";
 
-interface LandingPageProps {
-  onLaunchApp: () => void;   // go to Sign In
-  onGetStarted: () => void;  // go to Sign Up
-  onViewDemo: () => void;    // go to Demo form
-}
+const LandingPage: React.FC = () => {
+  const navigate = useNavigate();
 
-const LandingPage: React.FC<LandingPageProps> = ({
-  onLaunchApp,
-  onGetStarted,
-  onViewDemo,
-}) => {
+  const handleLaunchApp = () => navigate("/signin");
+  const handleGetStarted = () => navigate("/signup");
+  const handleViewDemo = () => navigate("/demo");
+
   const features = [
     {
       title: "GTM-native pipeline CRM",
@@ -95,7 +92,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
   return (
     <div className="min-h-screen bg-slate-950 text-slate-50 flex flex-col">
       {/* Reusable global header */}
-<Header onLaunchApp={onLaunchApp} onViewDemo={onViewDemo} />
+      <Header onLaunchApp={handleLaunchApp} onViewDemo={handleViewDemo} />
 
       {/* Main content */}
       <main className="flex-1 mx-auto max-w-6xl px-4 pb-16 pt-8 space-y-16">
@@ -120,7 +117,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
               {/* → Sign up */}
               <button
                 className="px-4 py-2 rounded-xl bg-indigo-600 text-xs font-semibold hover:bg-indigo-500"
-                onClick={onGetStarted}
+                onClick={handleGetStarted}
               >
                 Get started free
               </button>
@@ -128,7 +125,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
               {/* → Sign in */}
               <button
                 className="px-4 py-2 rounded-xl border border-slate-700 text-xs text-slate-200 hover:bg-slate-900"
-                onClick={onLaunchApp}
+                onClick={handleLaunchApp}
               >
                 Launch app
               </button>
@@ -136,7 +133,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
               {/* → Demo form */}
               <button
                 className="px-4 py-2 rounded-xl border border-slate-700/70 text-xs text-slate-300 hover:bg-slate-900/70"
-                onClick={onViewDemo}
+                onClick={handleViewDemo}
               >
                 Book a GTM walkthrough
               </button>
@@ -346,8 +343,8 @@ const LandingPage: React.FC<LandingPageProps> = ({
               <div className="rounded-xl bg-slate-950/80 border border-slate-800 p-2">
                 <div className="text-slate-200 mb-1">Field mapping</div>
                 <p>
-                  Opinionated defaults for enrichment, outreach and CRM—
-                  customizable later via a mapping UI.
+                  Opinionated defaults for enrichment, outreach and CRM—customizable
+                  later via a mapping UI.
                 </p>
               </div>
               <div className="rounded-xl bg-slate-950/80 border border-slate-800 p-2">
@@ -366,60 +363,86 @@ const LandingPage: React.FC<LandingPageProps> = ({
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <h2 className="text-lg font-semibold text-slate-50">
-                Start with a sandbox. Design your GTM OS.
+                14-day free trial. Simple pricing afterwards.
               </h2>
               <p className="text-sm text-slate-400 max-w-xl">
-                This demo is frontend-only. Use it to design flows with your
-                team, then plug in real data and automations.
+                Test your GTM OS with real flows and dummy data for two weeks.
+                After the trial, keep everything running on a simple monthly
+                subscription or switch to annual and save 20%.
               </p>
             </div>
           </div>
 
           <div className="grid gap-4 md:grid-cols-[2fr,3fr] items-start">
+            {/* Main subscription plan */}
             <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-4 flex flex-col gap-2">
               <div className="text-[11px] uppercase tracking-wide text-slate-400">
-                Sandbox
+                GTM OS · Pro
               </div>
-              <div className="text-2xl font-semibold text-slate-50 mb-1">
-                Free
+
+              <div className="flex items-baseline gap-1">
+                <span className="text-2xl font-semibold text-slate-50">
+                  €49
+                </span>
+                <span className="text-[11px] text-slate-400">
+                  /seat /month
+                </span>
               </div>
+
               <p className="text-[11px] text-slate-400">
-                Use the app as a clickable prototype for your GTM motion. No
-                backend, no data, just flows.
+                14-day free trial, then €49 per seat per month. Cancel
+                anytime. Ideal for SaaS founders, small GTM teams and agencies.
               </p>
+
               <ul className="mt-2 space-y-1 text-[11px] text-slate-300">
-                <li>• Full access to all views</li>
-                <li>• Preloaded dummy data</li>
-                <li>• No tracking, no login required</li>
+                <li>• Full access to all GTM views</li>
+                <li>• Unlimited deals, contacts &amp; accounts</li>
+                <li>• Workflow builder &amp; basic automations</li>
+                <li>• Email support during trial &amp; subscription</li>
               </ul>
-              <button
-                className="mt-3 w-full rounded-xl bg-indigo-600 py-2 text-xs font-semibold hover:bg-indigo-500"
-                onClick={onGetStarted}
-              >
-                Open live sandbox
+
+              <button className="mt-3 w-full rounded-xl bg-indigo-600 py-2 text-xs font-semibold hover:bg-indigo-500">
+                Start 14-day free trial
               </button>
+
+              <p className="mt-1 text-[10px] text-slate-500">
+                No commitment during trial. You decide on monthly vs. annual
+                at the end of the 14 days.
+              </p>
             </div>
 
+            {/* Annual option / explainer */}
             <div className="rounded-2xl border border-dashed border-slate-800 bg-slate-900/40 p-4 flex flex-col gap-2">
-              <div className="text-[11px] uppercase tracking-wide text-slate-400">
-                For builders / agencies
+              <div className="inline-flex items-center gap-2 text-[11px] uppercase tracking-wide text-emerald-400">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                <span>Save 20% with annual</span>
               </div>
+
+              <div className="flex items-baseline gap-1 mt-1">
+                <span className="text-xl font-semibold text-slate-50">
+                  €39
+                </span>
+                <span className="text-[11px] text-slate-400">
+                  /seat /month billed yearly
+                </span>
+              </div>
+
               <p className="text-[11px] text-slate-300">
-                Fork the repo, wire up a backend and APIs, and turn this into
-                your own GTM OS for clients or your internal team.
+                Switch to annual after your trial and lock in a 20% discount:
+                pay once per year, keep the same features and seats, and avoid
+                monthly billing friction.
               </p>
+
               <ul className="mt-2 space-y-1 text-[11px] text-slate-400">
-                <li>• Connect your preferred database and auth provider.</li>
-                <li>• Plug in Clay, HeyReach, SmartLead and CRM credentials.</li>
-                <li>• Deploy your branded version on Vercel in minutes.</li>
+                <li>• €468 per seat per year (vs. €588 on monthly)</li>
+                <li>• Same feature set as the monthly Pro plan</li>
+                <li>• Perfect for committed teams and agencies</li>
               </ul>
-              <div className="mt-3 flex flex-wrap gap-2 text-[11px] text-slate-500">
-                <span className="px-2 py-0.5 rounded-full bg-slate-950 border border-slate-800">
-                  Vite + React + Tailwind
-                </span>
-                <span className="px-2 py-0.5 rounded-full bg-slate-950 border border-slate-800">
-                  Ready for API wiring
-                </span>
+
+              <div className="mt-3 text-[11px] text-slate-500">
+                You can start on monthly, upgrade to annual later, or go
+                straight annual after your 14-day trial if the GTM OS fits
+                your workflow.
               </div>
             </div>
           </div>
